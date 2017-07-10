@@ -3,8 +3,10 @@ MAINTAINER Denis Golovin <denis@codeneric.com>
 
 # Install lamp stack plus curl
 RUN apt-get update && \
-    apt-get -y install apache2 libapache2-mod-php5 php5 php5-mysql mysql-server curl
+    apt-get -y install apache2 libapache2-mod-php5 php5 php5-mysql mysql-server curl php5-gd php5-curl
 
+RUN sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 258M/g" /etc/php5/apache2/php.ini
+RUN sed -i "s/post_max_size = 8M/post_max_size = 258M/g" /etc/php5/apache2/php.ini
 ADD apache2.conf /etc/apache2/apache2.conf
 # Download WordPress
 RUN curl -L "https://wordpress.org/wordpress-latest.tar.gz" > /wordpress.tar.gz && \
@@ -18,7 +20,6 @@ RUN curl -L "https://github.com/wp-cli/wp-cli/releases/download/v1.0.0/wp-cli-1.
 
 # WordPress configuration
 ADD wp-config.php /var/www/html/wp-config.php
-
 
 
 
@@ -47,7 +48,7 @@ ENV WP_ADMIN_EMAIL test@test.com
 # Install plugins
 RUN apt-get update && \
     apt-get -y install php5-xdebug
-    
+
 # Add configuration script
 ADD config_xdebug.sh /config_xdebug.sh
 ADD run_wordpress_xdebug.sh /run_wordpress_xdebug.sh
