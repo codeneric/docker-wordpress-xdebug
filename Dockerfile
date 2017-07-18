@@ -3,10 +3,22 @@ MAINTAINER Denis Golovin <denis@codeneric.com>
 
 # Install lamp stack plus curl
 RUN apt-get update && \
-    apt-get -y install apache2 libapache2-mod-php5 php5 php5-mysql mysql-server curl php5-gd php5-curl
+    apt-get -y install apache2 libapache2-mod-php5 php5 php5-mysql mysql-server curl php5-gd php5-curl \
+    wget subversion
+
+RUN wget https://phar.phpunit.de/phpunit-4.8.phar && \
+    chmod +x phpunit-4.8.phar && \
+    mv phpunit-4.8.phar /usr/local/bin/phpunit
 
 RUN sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 258M/g" /etc/php5/apache2/php.ini
 RUN sed -i "s/post_max_size = 8M/post_max_size = 258M/g" /etc/php5/apache2/php.ini
+
+RUN mkdir /debug && \
+    touch /debug/php_errors.log && \
+    chown www-data:www-data /debug/php_errors.log
+RUN sed -i "s/;error_log = php_errors.log/error_log = \/debug\/php_errors.log/g" /etc/php5/apache2/php.ini
+
+
 ADD apache2.conf /etc/apache2/apache2.conf
 # Download WordPress
 RUN curl -L "https://wordpress.org/wordpress-latest.tar.gz" > /wordpress.tar.gz && \
@@ -52,7 +64,15 @@ RUN apt-get update && \
 # Add configuration script
 ADD config_xdebug.sh /config_xdebug.sh
 ADD run_wordpress_xdebug.sh /run_wordpress_xdebug.sh
+
+ADD install-wp-tests.sh /install-wp-tests.sh
+ADD wait-for-it.sh /wait-for-it.sh
 RUN chmod 755 /*.sh
+
+#RUN ./wait-for-it.sh localhost:3306 -t 99
+#RUN bash /install-wp-tests.sh wordpress_test root '' localhost latest
+
+
 
 # Xdebug environment variables
 ENV XDEBUG_PORT 9000
