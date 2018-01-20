@@ -1,7 +1,7 @@
 FROM ubuntu:14.04
 MAINTAINER Denis Golovin <denis@codeneric.com>
 
-RUN apt-get update && apt-get -y install software-properties-common && add-apt-repository ppa:ondrej/php
+RUN apt-get update && apt-get -y install realpath software-properties-common && add-apt-repository ppa:ondrej/php
 RUN apt-get update && apt-get -y --force-yes install php5.6 php5.6-mbstring php5.6-mcrypt php5.6-mysql php5.6-xml \
  apache2 libapache2-mod-php5.6 php5.6-mysql mysql-server curl php5.6-gd php5.6-curl \
     wget subversion

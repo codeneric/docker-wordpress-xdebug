@@ -109,7 +109,7 @@ do
         if [[ $TIMEOUT == "" ]]; then break; fi
         shift 2
         ;;
-        --timeout=*)
+        --timeout=*)service apache2 restart
         TIMEOUT="${1#*=}"
         shift 1
         ;;
