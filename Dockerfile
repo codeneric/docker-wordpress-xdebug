@@ -79,7 +79,7 @@ RUN chmod 755 /*.sh
 #RUN ./wait-for-it.sh localhost:3306 -t 99
 #RUN bash /install-wp-tests.sh wordpress_test root '' localhost latest
 
-
+VOLUME /tmp
 
 # Xdebug environment variables
 ENV XDEBUG_PORT 9000

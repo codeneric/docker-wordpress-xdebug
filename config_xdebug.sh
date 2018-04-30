@@ -9,6 +9,11 @@ if [ ! -f /xdebug_configured ]; then
     fi
     echo "xdebug.remote_autostart=$XDEBUG_REMOTE_AUTOSTART" >> /etc/php/5.6/mods-available/xdebug.ini
 
+    # enable profiling on trigger!
+    # echo "xdebug.profiler_enable=on" >> /etc/php/5.6/mods-available/xdebug.ini 
+    echo "xdebug.profiler_enable_trigger=on" >> /etc/php/5.6/mods-available/xdebug.ini
+    
+
     # https://xdebug.org/docs/all_settings#remote_connect_back
     # 1. If enabled, the xdebug.remote_host setting is ignored
     # 2. Doesn't work correctly if Docker for Mac is used
