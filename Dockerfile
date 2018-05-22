@@ -3,11 +3,9 @@ MAINTAINER Denis Golovin <denis@codeneric.com>
 
 RUN apt-get update && apt-get -y install realpath software-properties-common && add-apt-repository ppa:ondrej/php
 RUN apt-get update && apt-get -y --force-yes install php5.6 php5.6-mbstring php5.6-mcrypt php5.6-mysql php5.6-xml \
- apache2 libapache2-mod-php5.6 php5.6-mysql mysql-server curl php5.6-gd php5.6-curl \
-    wget subversion
-RUN php -v
-RUN ls  /etc
-RUN ls  /etc/php
+    apache2 libapache2-mod-php5.6 php5.6-mysql mysql-server curl php5.6-gd php5.6-curl \
+    wget subversion php5.6-zip
+
 # Install lamp stack plus curl
 #RUN apt-get update && \
 #    apt-get -y install apache2 libapache2-mod-php5 php5 php5-mysql mysql-server curl php5-gd php5-curl \
@@ -28,7 +26,7 @@ RUN sed -i "s/;error_log = php_errors.log/error_log = \/debug\/php_errors.log/g"
 
 ADD apache2.conf /etc/apache2/apache2.conf
 # Download WordPress
-RUN curl -L "https://wordpress.org/wordpress-latest.tar.gz" > /wordpress.tar.gz && \
+RUN curl -L "https://wordpress.org/wordpress-latest.tar.gz" > /wordpress.tar.gz && \ 
     rm /var/www/html/index.html && \
     tar -xzf /wordpress.tar.gz -C /var/www/html --strip-components=1 && \
     rm /wordpress.tar.gz
@@ -80,6 +78,7 @@ RUN chmod 755 /*.sh
 #RUN bash /install-wp-tests.sh wordpress_test root '' localhost latest
 
 VOLUME /tmp
+VOLUME /wordpress_sources
 
 # Xdebug environment variables
 ENV XDEBUG_PORT 9000
