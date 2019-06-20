@@ -10,4 +10,4 @@ docker run \
     -e WP_ADMIN_USER=admin \
     -e WP_ADMIN_PASSWORD=admin \
     -d \
-    registry.codeneric.com:5000/wordpress-xdebug || docker start test
+    codeneric/wordpress-xdebug
