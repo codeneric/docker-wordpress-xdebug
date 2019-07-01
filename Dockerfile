@@ -4,6 +4,26 @@ RUN docker-php-ext-install mysqli
 RUN pecl install xdebug-2.7.2
 # RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
+
+# RUN apt-get update -y && apt-get install -y sendmail libpng-dev
+RUN apt-get update -y && apt-get install -y sendmail libpng-dev libjpeg-dev
+
+# RUN apt-get update && \
+#     apt-get install -y \
+#     zlib1g-dev 
+
+# RUN docker-php-ext-install mbstring
+
+RUN docker-php-ext-install zip
+
+# RUN docker-php-ext-install gd
+
+RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ && \
+    docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd
+
+RUN echo "upload_max_filesize = 128M" >> /usr/local/etc/php/php.ini
+RUN echo "post_max_size = 128M" >> /usr/local/etc/php/php.ini
+
 RUN echo "xdebug.remote_enable=1" >> /usr/local/etc/php/php.ini
 RUN echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/php.ini
 RUN echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/php.ini
